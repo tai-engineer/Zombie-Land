@@ -10,6 +10,6 @@ AssetOrigin:
   productId: 276554
   packageName: Better Transform - Size, Notes, Global-Local workspace & child parent
     transform
-  packageVersion: 2.9.0
+  packageVersion: 2.11.0
   assetPath: Assets/Plugins/Tiny Giant Studio/Better Inspector/Better Transform/Scripts/TinyGiantStudio.BetterInspector.BetterTransform.asmdef
-  uploadId: 758625
+  uploadId: 765369

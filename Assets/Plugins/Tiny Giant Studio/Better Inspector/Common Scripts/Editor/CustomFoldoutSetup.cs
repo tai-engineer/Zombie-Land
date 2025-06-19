@@ -28,7 +28,7 @@ namespace TinyGiantStudio.BetterInspector
             }
         }
 
-    
+
 
         private void BindToggle(Toggle toggle, GroupBox content)
         {

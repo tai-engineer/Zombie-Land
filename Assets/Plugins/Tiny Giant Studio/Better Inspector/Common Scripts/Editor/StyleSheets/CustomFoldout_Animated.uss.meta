@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 48d496df230ab8c41a776949cc106f3e
+guid: 920070771e2f6c747b78ea05534a8a79
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -15,5 +15,5 @@ AssetOrigin:
   packageName: Better Transform - Size, Notes, Global-Local workspace & child parent
     transform
   packageVersion: 2.11.0
-  assetPath: Assets/Plugins/Tiny Giant Studio/Better Inspector/Better Transform/Scripts/Editor/StyleSheets/MainInformation.uss
+  assetPath: Assets/Plugins/Tiny Giant Studio/Better Inspector/Common Scripts/Editor/StyleSheets/CustomFoldout_Animated.uss
   uploadId: 765369

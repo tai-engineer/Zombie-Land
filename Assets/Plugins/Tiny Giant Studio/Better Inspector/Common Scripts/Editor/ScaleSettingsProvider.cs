@@ -12,7 +12,7 @@ namespace TinyGiantStudio.BetterInspector
         [SettingsProvider]
         private static SettingsProvider CreateScaleSettingsProvider()
         {
-            Scales scales = ScalesFinder.MyScales();
+            ScalesManager scales = ScalesFinder.MyScales();
 
             if (scales.units.Count == 0)
             {

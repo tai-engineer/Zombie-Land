@@ -3,7 +3,7 @@
     <Style src="project://database/Assets/Plugins/Tiny%20Giant%20Studio/Better%20Inspector/Common%20Scripts/Editor/StyleSheets/Labels.uss?fileID=7433441132597879392&amp;guid=8e783b06ea75cae42a70cbd434239c92&amp;type=3#Labels" />
     <ui:GroupBox name="TemplateRoot" class="custom-foldout" style="overflow: hidden; margin-top: 5px;">
         <ui:GroupBox class="header" style="overflow: hidden;">
-            <ui:Toggle name="FoldoutToggle" text="Parent" value="false" tooltip="Please note that the size of the parent/child isn&apos;t automatically updated here after the first opening it." class="unity-foldout__toggle foldout-toggle" style="flex-grow: 1;" />
+            <ui:Toggle name="FoldoutToggle" text="Parent" value="false" tooltip="The sizes here are only calculated when this foldout is first opened. To update them, please use the refresh button." class="unity-foldout__toggle foldout-toggle" style="flex-grow: 1;" />
             <ui:Label text="(1)" display-tooltip-when-elided="true" tooltip="Sibling Index" name="Label1" class="unimportant-information-label" />
             <ui:Label text="(1)" display-tooltip-when-elided="true" tooltip="Sibling Index" name="Label2" class="unimportant-information-label" />
         </ui:GroupBox>

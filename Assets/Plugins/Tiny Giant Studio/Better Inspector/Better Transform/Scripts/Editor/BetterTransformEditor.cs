@@ -50,6 +50,10 @@ namespace TinyGiantStudio.BetterInspector
         [SerializeField]
         private VisualTreeAsset folderTemplate;
 
+        [SerializeField]
+        private StyleSheet animatedFoldoutStyleSheet;
+        private readonly string animatedFoldoutStyleSheetFileLocation = "Assets/Plugins/Tiny Giant Studio/Better Inspector/Common Scripts/Editor/StyleSheets/CustomFoldout_Animated.uss";
+
         private readonly string folderTemplateFileLocation = "Assets/Plugins/Tiny Giant Studio/Better Inspector/Better Transform/Scripts/Editor/Templates/CustomFoldoutTemplate.uxml";
 
         #endregion Referenced in the Inspector
@@ -150,6 +154,8 @@ namespace TinyGiantStudio.BetterInspector
             logPerformance = editorSettings.logPerformance;
             logDetailedPerformance = editorSettings.logDetailedPerformance;
 
+            sizeSetupDone = false;
+
             if (logPerformance)
             {
                 if (stopwatch != null) stopwatch.Reset();
@@ -216,6 +222,37 @@ namespace TinyGiantStudio.BetterInspector
 
             FirstTimeSetup();
 
+            if (animatedFoldoutStyleSheet == null)
+                animatedFoldoutStyleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(animatedFoldoutStyleSheetFileLocation);
+
+            if (animatedFoldoutStyleSheet != null) //This shouldn't happen though. Just added for just in case, didn't get any error
+            {
+                if (editorSettings.animatedFoldout)
+                    root.styleSheets.Add(animatedFoldoutStyleSheet);
+            }
+
+            Button pingSelfButton = root.Q<Button>("PingSelfButton");
+            pingSelfButton.clicked += () =>
+            {
+                ///Multi ping is commented out because PingObject only pings the last one.
+                //if(targets.Length == 1)
+                EditorGUIUtility.PingObject(transform);
+                //else
+                //{
+                //    foreach (var t in targets)
+                //    {
+                //        if(t == null) continue;
+                //        EditorGUIUtility.PingObject(t as Transform);
+                //    }
+                //}
+            };
+            if (editorSettings.pingSelfButton)
+                pingSelfButton.style.display = DisplayStyle.Flex;
+            else
+                pingSelfButton.style.display = DisplayStyle.None;
+
+
+            //Finish code above this line------------------
             if (logPerformance)
             {
                 LogDelay("Total time spent", stopwatch.ElapsedMilliseconds);
@@ -223,6 +260,10 @@ namespace TinyGiantStudio.BetterInspector
             }
 
             StartSizeSchedule();
+
+
+
+
 
             return root;
         }
@@ -273,7 +314,6 @@ namespace TinyGiantStudio.BetterInspector
 
             if (targets.Length == 1)
             {
-                SetupSettings();
                 if (logPerformance)
                 {
                     time = stopwatch.ElapsedMilliseconds - totalMS;
@@ -295,8 +335,6 @@ namespace TinyGiantStudio.BetterInspector
             }
             else
             {
-                Button openSettingsButton = topGroupBox.Q<Button>("OpenSettingsButton");
-                openSettingsButton.style.display = DisplayStyle.None;
                 HideSize();
             }
 
@@ -895,7 +933,7 @@ namespace TinyGiantStudio.BetterInspector
                         else
                             evt.menu.AppendAction("Apply to Prefab '" + PrefabUtility.GetCorrespondingObjectFromSource(transform.gameObject).name + "'", (x) => ApplyPositionChangeToPrefab(), DropdownMenuAction.AlwaysDisabled);
 
-                        evt.menu.AppendAction("Revert", (x) => ResetPositionChangeToPrefab(), DropdownMenuAction.AlwaysEnabled);
+                        evt.menu.AppendAction("Revert", (x) => RevertPositionChangeToPrefab(), DropdownMenuAction.AlwaysEnabled);
                     }
 
                     evt.menu.AppendSeparator();
@@ -924,7 +962,7 @@ namespace TinyGiantStudio.BetterInspector
                 }
             }
 
-            void ResetPositionChangeToPrefab()
+            void RevertPositionChangeToPrefab()
             {
                 if (soTarget.FindProperty("m_LocalPosition").prefabOverride)
                 {
@@ -1388,7 +1426,7 @@ namespace TinyGiantStudio.BetterInspector
                         else
                             evt.menu.AppendAction("Apply to Prefab '" + PrefabUtility.GetCorrespondingObjectFromSource(transform.gameObject).name + "'", (x) => ApplyRotationChangeToPrefab(), DropdownMenuAction.AlwaysDisabled);
 
-                        evt.menu.AppendAction("Revert", (x) => ResetRotationChangeToPrefab(), DropdownMenuAction.AlwaysEnabled);
+                        evt.menu.AppendAction("Revert", (x) => RevertRotationChangeToPrefab(), DropdownMenuAction.AlwaysEnabled);
                     }
 
                     evt.menu.AppendSeparator();
@@ -1420,11 +1458,10 @@ namespace TinyGiantStudio.BetterInspector
                 }
             }
 
-            void ResetRotationChangeToPrefab()
+            void RevertRotationChangeToPrefab()
             {
                 if (soTarget.FindProperty(rotationProperty).prefabOverride)
                 {
-                    Debug.Log("Revert rot");
                     PrefabUtility.RevertPropertyOverride(soTarget.FindProperty(rotationProperty), InteractionMode.UserAction);
                 }
             }
@@ -2267,7 +2304,7 @@ namespace TinyGiantStudio.BetterInspector
                     {
                         evt.menu.AppendSeparator();
                         evt.menu.AppendAction("Apply to Prefab '" + PrefabUtility.GetCorrespondingObjectFromSource(transform.gameObject).name + "'", (x) => ApplyScaleChangeToPrefab(), DropdownMenuAction.AlwaysEnabled);
-                        evt.menu.AppendAction("Revert", (x) => ResetScaleChangeToPrefab(), DropdownMenuAction.AlwaysEnabled);
+                        evt.menu.AppendAction("Revert", (x) => RevertScaleChangeToPrefab(), DropdownMenuAction.AlwaysEnabled);
                     }
 
                     evt.menu.AppendSeparator();
@@ -2296,7 +2333,7 @@ namespace TinyGiantStudio.BetterInspector
                 }
             }
 
-            void ResetScaleChangeToPrefab()
+            void RevertScaleChangeToPrefab()
             {
                 if (soTarget.FindProperty(scaleProperty).prefabOverride)
                 {
@@ -2880,12 +2917,12 @@ namespace TinyGiantStudio.BetterInspector
                 sizeFoldout.style.display = DisplayStyle.None;
 
             unitDropDownField = sizeFoldout.Q<DropdownField>("UnitsDropDownField");
-            if (ScalesFinder.MyScales().GetAvailableUnits().ToList().Count == 0) ScalesFinder.MyScales().Reset();
-            unitDropDownField.choices = ScalesFinder.MyScales().GetAvailableUnits().ToList();
-            unitDropDownField.index = ScalesFinder.MyScales().selectedUnit;
+            if (ScalesManager.instance.GetAvailableUnits().ToList().Count == 0) ScalesManager.instance.Reset();
+            unitDropDownField.choices = ScalesManager.instance.GetAvailableUnits().ToList();
+            unitDropDownField.index = ScalesManager.instance.selectedUnit;
             unitDropDownField.RegisterValueChangedCallback(ev =>
             {
-                var myScales = ScalesFinder.MyScales();
+                var myScales = ScalesManager.instance;
                 myScales.selectedUnit = unitDropDownField.index;
                 EditorUtility.SetDirty(myScales);
 
@@ -2960,7 +2997,7 @@ namespace TinyGiantStudio.BetterInspector
             sizeCopyButton = sizeFoldout.Q<Button>("Copy");
             sizeCopyButton.clicked += () =>
             {
-                float unitMultiplier = ScalesFinder.MyScales().CurrentUnitValue();
+                float unitMultiplier = ScalesManager.instance.CurrentUnitValue();
                 //EditorGUIUtility.systemCopyBuffer = "Vector3" + RoundedVector3(currentBound.size * unitMultiplier).ToString();
                 EditorGUIUtility.systemCopyBuffer = "Vector3" + (currentBound.size * unitMultiplier).ToString("F20");
             };
@@ -2976,7 +3013,7 @@ namespace TinyGiantStudio.BetterInspector
                 SetSize(new Vector3(x, y, z));
                 EditorUtility.SetDirty(transform);
 
-                float unitMultiplier = ScalesFinder.MyScales().CurrentUnitValue();
+                float unitMultiplier = ScalesManager.instance.CurrentUnitValue();
                 sizeFoldoutField.SetValueWithoutNotify(RoundedVector3(currentBound.size * unitMultiplier));
                 sizeCenterFoldoutField.SetValueWithoutNotify(RoundedVector3(currentBound.center * unitMultiplier));
             };
@@ -2988,7 +3025,7 @@ namespace TinyGiantStudio.BetterInspector
                 SetSize(Vector3.one);
                 EditorUtility.SetDirty(transform);
 
-                float unitMultiplier = ScalesFinder.MyScales().CurrentUnitValue();
+                float unitMultiplier = ScalesManager.instance.CurrentUnitValue();
                 sizeFoldoutField.SetValueWithoutNotify(RoundedVector3(Vector3.one * unitMultiplier));
                 sizeCenterFoldoutField.SetValueWithoutNotify(RoundedVector3(currentBound.center * unitMultiplier));
             };
@@ -3094,10 +3131,10 @@ namespace TinyGiantStudio.BetterInspector
 
             if (editorSettings.ShowSizeFoldout || editorSettings.ShowSizeInLine)
             {
-                if (ScalesFinder.MyScales().GetAvailableUnits().ToList().Count == 0) ScalesFinder.MyScales().Reset();
-                unitDropDownField.choices = ScalesFinder.MyScales().GetAvailableUnits().ToList();
+                if (ScalesManager.instance.GetAvailableUnits().ToList().Count == 0) ScalesManager.instance.Reset();
+                unitDropDownField.choices = ScalesManager.instance.GetAvailableUnits().ToList();
 
-                unitDropDownField.index = ScalesFinder.MyScales().selectedUnit;
+                unitDropDownField.index = ScalesManager.instance.selectedUnit;
 
                 UpdateSizeInclusionButtons();
             }
@@ -3213,13 +3250,20 @@ namespace TinyGiantStudio.BetterInspector
                     if (editorSettings.showWhySizeIsHiddenLabel)
                     {
                         sizeFoldoutInformationLabel.style.display = DisplayStyle.Flex;
+
                         if (!editorSettings.IncludeChildBounds)
                         {
                             if (transform.childCount > 0)
                                 sizeFoldoutInformationLabel.text = "Size is hidden because this object has no mesh with size and child object's size is ignored because self size is selected";
                             else
-                                sizeFoldoutInformationLabel.text = "Size is hidden because this object has no mesh with size.";
-                            sizeFoldoutInformationLabel.tooltip = "Showing zero size on an empty game object can be misleading."; //todo add a note about how to swap to hierarchy size.
+                            {
+                                if (editorSettings.CurrentSizeType == BetterTransformSettings.SizeType.Filter && transform.GetComponent<Renderer>() != null)
+                                    sizeFoldoutInformationLabel.text = "Size is hidden because size type of filter is selected and this object has a renderer.";
+                                else if (editorSettings.CurrentSizeType == BetterTransformSettings.SizeType.Renderer && editorSettings.ignoreParticleAndVFXInSizeCalculation && (transform.GetComponent<ParticleSystem>() != null || transform.GetComponent<VisualEffect>()))
+                                    sizeFoldoutInformationLabel.text = "Size is hidden because the size of particle systems and visual effect are ignored in setting.";
+                                else
+                                    sizeFoldoutInformationLabel.text = "Size is hidden because this object has no mesh with size.";
+                            }
                         }
                         else
                         {
@@ -3230,9 +3274,15 @@ namespace TinyGiantStudio.BetterInspector
                                 if (transform.childCount > 0)
                                     sizeFoldoutInformationLabel.text = "Size is hidden because this object and it's child objects have no mesh with size or size needs to be updated.";
                                 else
-                                    sizeFoldoutInformationLabel.text = "Size is hidden because this object has no mesh with size.";
+                                {
+                                    if (editorSettings.CurrentSizeType == BetterTransformSettings.SizeType.Filter && transform.GetComponent<Renderer>() != null)
+                                        sizeFoldoutInformationLabel.text = "Size is hidden because size type of filter is selected and this object has a renderer.";
+                                    else if (editorSettings.CurrentSizeType == BetterTransformSettings.SizeType.Renderer && editorSettings.ignoreParticleAndVFXInSizeCalculation && (transform.GetComponent<ParticleSystem>() != null || transform.GetComponent<VisualEffect>()))
+                                        sizeFoldoutInformationLabel.text = "Size is hidden because the size of particle systems and visual effect are ignored in setting.";
+                                    else
+                                        sizeFoldoutInformationLabel.text = "Size is hidden because this object has no mesh with size.";
+                                }
                             }
-                            sizeFoldoutInformationLabel.tooltip = "Showing zero size on an empty game object can be misleading.";
                         }
                     }
                     else
@@ -3245,7 +3295,9 @@ namespace TinyGiantStudio.BetterInspector
                 return;
             }
 
-            sizeFoldoutInformationLabel.style.display = DisplayStyle.None;
+            sizeFoldoutInformationLabel ??= root.Q<Label>("sizeInformationLabel");
+            if (sizeFoldoutInformationLabel != null) //Paranoid if statement. Its 5AM and I am still working
+                sizeFoldoutInformationLabel.style.display = DisplayStyle.None;
 
             if (editorSettings.ShowSizeFoldout && targets.Length == 1)
                 sizeFoldout.style.display = DisplayStyle.Flex;
@@ -3260,7 +3312,7 @@ namespace TinyGiantStudio.BetterInspector
                 inlineSizeButtonsGroupBox.style.display = DisplayStyle.Flex;
             }
 
-            float unitMultiplier = ScalesFinder.MyScales().CurrentUnitValue();
+            float unitMultiplier = ScalesManager.instance.CurrentUnitValue();
 
             if (sizeFoldoutField == null)
                 SetupSize(customFoldoutSetup);
@@ -3288,7 +3340,7 @@ namespace TinyGiantStudio.BetterInspector
         /// <param name="newSize"></param>
         private void SetSize(Vector3 newSize)
         {
-            float unitMultiplier = ScalesFinder.MyScales().CurrentUnitValue();
+            float unitMultiplier = ScalesManager.instance.CurrentUnitValue();
 
             currentBound = CheckSize(transform);
             Vector3 originalSize = currentBound.size * unitMultiplier;
@@ -3496,6 +3548,7 @@ namespace TinyGiantStudio.BetterInspector
                 manualUpdateButton.style.display = DisplayStyle.None;
 
             Bounds newBound = new Bounds();
+
             Transform[] transforms = target.GetComponentsInChildren<Transform>()
                                         .Where(t =>
                                             !editorSettings.ignoreParticleAndVFXInSizeCalculation ||
@@ -3557,7 +3610,7 @@ namespace TinyGiantStudio.BetterInspector
         {
             Bounds newBound = new Bounds();
 
-            //Transform[] transforms = target.GetComponentsInChildren<Transform>();
+
             Transform[] transforms = target.GetComponentsInChildren<Transform>()
                             .Where(t =>
                                 !editorSettings.ignoreParticleAndVFXInSizeCalculation ||
@@ -3710,6 +3763,7 @@ namespace TinyGiantStudio.BetterInspector
         private string myNote;
         private NoteType noteType;
         private Color noteColor;
+        bool showThisNoteInSceneView;
 
         private GroupBox noteEditGroupBox;
         private GroupBox noteTopGroupBox;
@@ -3718,6 +3772,7 @@ namespace TinyGiantStudio.BetterInspector
         private Button noteChangeCancelButton;
         private Button noteDeleteButton;
         private EnumField noteTypeField;
+        Toggle showThisNoteGizmoInSceneToggle;
         private ColorField noteColorField;
 
         private SceneNotesManager sceneNotesManager;
@@ -3798,9 +3853,16 @@ namespace TinyGiantStudio.BetterInspector
                 {
                     if (sceneNotesManager != null)
                     {
-                        //TODO. These two should be one
-                        myNote = sceneNotesManager.GetNote(transform);
-                        noteType = sceneNotesManager.GetNoteType(transform);
+                        var note = sceneNotesManager.MyNote(transform);
+                        if (note != null)
+                        {
+                            myNote = note.note;
+                            noteType = note.noteType;
+                            showThisNoteInSceneView = note.showInSceneView;
+                        }
+                        ////TODO. These two should be one
+                        //myNote = sceneNotesManager.GetNote(transform);
+                        //noteType = sceneNotesManager.GetNoteType(transform);
                     }
                 }
 
@@ -3816,10 +3878,18 @@ namespace TinyGiantStudio.BetterInspector
             if (!initialNoteSetupDone)
             {
                 InitialNoteSetup();
-                Debug.Log("Initial setup being done in full setup");
+                //Debug.Log("Initial setup being done in full setup");
             }
 
             noteTextField = root.Q<TextField>("Note");
+            if (noteColorField == null)
+                noteColorField = root.Q<ColorField>("NoteBGColor");
+
+            showThisNoteGizmoInSceneToggle = root.Q<Toggle>("ShowThisNoteGizmoInSceneToggle");
+            showThisNoteGizmoInSceneToggle.RegisterValueChangedCallback(e =>
+            {
+                showThisNoteInSceneView = e.newValue;
+            });
 
             noteTypeField = root.Q<EnumField>("NoteType");
             noteTypeField.Init(NoteType.tooltip);
@@ -3922,10 +3992,24 @@ namespace TinyGiantStudio.BetterInspector
             noteEditGroupBox.style.display = DisplayStyle.Flex;
 
             noteTypeField ??= root.Q<EnumField>("NoteType");
+            showThisNoteGizmoInSceneToggle ??= root.Q<Toggle>("ShowThisNoteGizmoInSceneToggle");
 
             noteTypeField.value = GetNoteType();
             noteColor = GetNoteColor();
             noteColorField.value = noteColor;
+            showThisNoteGizmoInSceneToggle.SetValueWithoutNotify(showThisNoteInSceneView);
+            if (!editorSettings.ShowNotesOnGizmo)
+            {
+                showThisNoteGizmoInSceneToggle.SetEnabled(false);
+                showThisNoteGizmoInSceneToggle.tooltip = "Notes in scene view has been turned off from settings.";
+            }
+            else
+            {
+                showThisNoteGizmoInSceneToggle.SetEnabled(true);
+                if (showThisNoteGizmoInSceneToggle.tooltip == "Notes in scene view has been turned off from settings.")
+                    showThisNoteGizmoInSceneToggle.tooltip = "";
+
+            }
 
             UpdateNoteTextFieldFromSavedNote();
         }
@@ -3983,7 +4067,7 @@ namespace TinyGiantStudio.BetterInspector
 
             if (thisIsAnAsset)
             {
-                editorSettings.SetNote(GetID(), myNote, noteType, noteColor);
+                editorSettings.SetNote(GetID(), myNote, noteType, noteColor, showThisNoteInSceneView);
             }
             else
             {
@@ -3991,7 +4075,7 @@ namespace TinyGiantStudio.BetterInspector
 
                 if (sceneNotesManager != null)
                 {
-                    sceneNotesManager.SetNote(transform, myNote, noteType, noteColor);
+                    sceneNotesManager.SetNote(transform, myNote, noteType, noteColor, showThisNoteInSceneView);
                 }
             }
 
@@ -4287,53 +4371,66 @@ namespace TinyGiantStudio.BetterInspector
 
         #region Variables
 
-        private Button addFunctionalityButton;
-        private GenericDropdownMenu addFunctionalityContextMenu;
+        private Button settingsButton;
+        private GenericDropdownMenu settingsMenuButton;
 
         #endregion Variables
 
         private void SetupAddFunctionality()
         {
-            addFunctionalityButton = topGroupBox.Q<Button>("AddButton");
+            settingsButton = topGroupBox.Q<Button>("AddButton");
 
             if (targets.Length != 1)
             {
-                addFunctionalityButton.style.visibility = Visibility.Hidden;
+                settingsButton.style.visibility = Visibility.Hidden;
                 return;
             }
 
-            addFunctionalityButton.clicked += () => OpenContextMenu_addFunctionality();
+            settingsButton.clicked += () => OpenContextMenu_settings();
         }
 
-        private void OpenContextMenu_addFunctionality()
+        private void OpenContextMenu_settings()
         {
             UpdateContextMenu_addFunctionality();
-            addFunctionalityContextMenu.DropDown(GetMenuRect(addFunctionalityButton), addFunctionalityButton, true);
+            settingsMenuButton.DropDown(GetMenuRect(settingsButton), settingsButton, true);
         }
 
         private void UpdateContextMenu_addFunctionality()
         {
-            addFunctionalityContextMenu = new GenericDropdownMenu();
+            settingsMenuButton = new GenericDropdownMenu();
+            if (settingsFoldout == null || settingsFoldout.style.display == DisplayStyle.None)
+                settingsMenuButton.AddItem("Open Settings", false, () => OpenSettings());
+            else
+                settingsMenuButton.AddItem("Close Settings", false, () => ToggleSettings(false));
+
+            settingsMenuButton.AddSeparator("");
+
             if (editorSettings.CurrentWorkSpace == BetterTransformSettings.WorkSpace.Both)
             {
-                addFunctionalityContextMenu.AddItem("Both space together", true, () =>
+                settingsMenuButton.AddItem("Both Space Together", true, () =>
                 {
                     editorSettings.CurrentWorkSpace = BetterTransformSettings.WorkSpace.Local;
                     UpdateMainControls();
                     UpdateSize();
                 });
+                settingsMenuButton.AddDisabledItem("Default Inspector for Local Fields", true);
             }
             else
             {
-                addFunctionalityContextMenu.AddItem("Both space together", false, () =>
+                settingsMenuButton.AddItem("Both Space Together", false, () =>
                 {
                     editorSettings.CurrentWorkSpace = BetterTransformSettings.WorkSpace.Both;
                     UpdateMainControls();
                     UpdateSize();
                 });
+                settingsMenuButton.AddItem("Default Inspector for Local Fields", editorSettings.LoadDefaultInspector, () =>
+                {
+                    editorSettings.LoadDefaultInspector = !editorSettings.LoadDefaultInspector;
+                    UpdateMainControls();
+                });
             }
 
-            addFunctionalityContextMenu.AddSeparator("");
+            settingsMenuButton.AddSeparator("");
             if (editorSettings.ShowNotes)
             {
                 if (!NoteEditBoxOpen())
@@ -4343,38 +4440,71 @@ namespace TinyGiantStudio.BetterInspector
                         noteLabel = "Add note";
                     else
                         noteLabel = "Modify note";
-                    addFunctionalityContextMenu.AddItem(noteLabel, false, () => OpenNoteEditBox());
+                    settingsMenuButton.AddItem(noteLabel, false, () => OpenNoteEditBox());
                 }
             }
 
-            addFunctionalityContextMenu.AddSeparator("");
+            settingsMenuButton.AddSeparator("");
 
             bool hierarchySize = editorSettings.IncludeChildBounds;
-            addFunctionalityContextMenu.AddItem("Hierarchy Size", hierarchySize, () =>
+            settingsMenuButton.AddItem("Hierarchy Size", hierarchySize, () =>
             {
                 editorSettings.IncludeChildBounds = true;
                 UpdateSizeInclusionButtons();
                 SceneView.RepaintAll();
             });
-            addFunctionalityContextMenu.AddItem("Self Size", !hierarchySize, () =>
+            settingsMenuButton.AddItem("Self Size", !hierarchySize, () =>
             {
                 editorSettings.IncludeChildBounds = false;
                 UpdateSizeInclusionButtons();
                 SceneView.RepaintAll();
             });
 
-            addFunctionalityContextMenu.AddSeparator("");
+            settingsMenuButton.AddSeparator("");
 
-            if (settingsFoldout == null || settingsFoldout.style.display == DisplayStyle.None)
-                addFunctionalityContextMenu.AddItem("Open Settings", false, () => OpenSettings());
+          
+            settingsMenuButton.AddItem("Renderer Size", editorSettings.CurrentSizeType == BetterTransformSettings.SizeType.Renderer, () =>
+            {
+                editorSettings.CurrentSizeType = BetterTransformSettings.SizeType.Renderer;
+                UpdateSizeTypeButtons();
+                UpdateSize();
+            });
+
+            settingsMenuButton.AddItem("Mesh Filter Only Size", editorSettings.CurrentSizeType == BetterTransformSettings.SizeType.Filter, () =>
+            {
+                editorSettings.CurrentSizeType = BetterTransformSettings.SizeType.Filter;
+                UpdateSizeTypeButtons();
+                UpdateSize();
+            });
+
+            settingsMenuButton.AddSeparator("");
+            settingsMenuButton.AddItem("Include Child Objects in Size Calculation", editorSettings.IncludeChildBounds, () =>
+            {
+                editorSettings.IncludeChildBounds = !editorSettings.IncludeChildBounds;
+                UpdateSizeInclusionButtons();
+
+                SceneView.RepaintAll();
+            });
+
+
+            if (editorSettings.CurrentSizeType == BetterTransformSettings.SizeType.Filter)
+                settingsMenuButton.AddDisabledItem("Ignore Particle and VFX Renderer", editorSettings.ignoreParticleAndVFXInSizeCalculation);
             else
-                addFunctionalityContextMenu.AddItem("Close Settings", false, () => ToggleSettings(false));
+            {
+                settingsMenuButton.AddItem("Ignore Particle and VFX Renderer", editorSettings.ignoreParticleAndVFXInSizeCalculation, () =>
+                {
+                    editorSettings.ignoreParticleAndVFXInSizeCalculation = !editorSettings.ignoreParticleAndVFXInSizeCalculation;
+                    editorSettings.Save();
+                    UpdateSize(true);
+                    SceneView.RepaintAll();
+                });
+            }
         }
 
         private Rect GetMenuRect(VisualElement anchor)
         {
             var worldBound = anchor.worldBound;
-            worldBound.xMin -= 150;
+            worldBound.xMin -= 250;
             worldBound.xMax += 0;
             return worldBound;
         }
@@ -4393,27 +4523,6 @@ namespace TinyGiantStudio.BetterInspector
         private Toggle roundRotationFieldToggle;
         private Toggle roundScaleFieldToggle;
 
-        /// <summary>
-        /// This is called once when the object is selected.
-        ///
-        /// The fields are setup AFTER the foldout is opened
-        /// </summary>
-        /// <param name="customFoldoutSetup"></param>
-        private void SetupSettings()
-        {
-            //The gear icon on the right top corner
-            Button openSettingsButton = topGroupBox.Q<Button>("OpenSettingsButton");
-            if (targets.Length > 1)
-            {
-                openSettingsButton.style.display = DisplayStyle.None;
-                return;
-            }
-
-            openSettingsButton.clicked += () =>
-            {
-                OpenSettings();
-            };
-        }
 
         private void OpenSettings()
         {
@@ -4456,7 +4565,6 @@ namespace TinyGiantStudio.BetterInspector
         /// <param name="value">Turn on or off</param>
         private void ToggleSettings(bool value)
         {
-            GroupBox settingsFoldout = root.Q<GroupBox>("Settings");
             Toggle foldoutToggle = settingsFoldout.Q<Toggle>("FoldoutToggle");
             GroupBox content = settingsFoldout.Q<GroupBox>("Content");
 
@@ -4466,7 +4574,6 @@ namespace TinyGiantStudio.BetterInspector
 
         private void ToggleSettings()
         {
-            GroupBox settingsFoldout = root.Q<GroupBox>("Settings");
             Toggle foldoutToggle = settingsFoldout.Q<Toggle>("FoldoutToggle");
             GroupBox content = settingsFoldout.Q<GroupBox>("Content");
 
@@ -4508,6 +4615,29 @@ namespace TinyGiantStudio.BetterInspector
             {
                 editorSettings.LoadDefaultInspector = e.newValue;
                 UpdateMainControls();
+            });
+
+            Toggle foldoutAnimationsToggle = inspectorSettingsFoldout.Q<Toggle>("FoldoutAnimationsToggle");
+            foldoutAnimationsToggle.SetValueWithoutNotify(editorSettings.animatedFoldout);
+            foldoutAnimationsToggle.RegisterValueChangedCallback(e =>
+            {
+                editorSettings.animatedFoldout = e.newValue;
+                editorSettings.Save();
+
+                if (!e.newValue)
+                {
+                    if (root.styleSheets.Contains(animatedFoldoutStyleSheet))
+                    {
+                        root.styleSheets.Remove(animatedFoldoutStyleSheet);
+                    }
+                }
+                else
+                {
+                    if (!root.styleSheets.Contains(animatedFoldoutStyleSheet))
+                    {
+                        root.styleSheets.Add(animatedFoldoutStyleSheet);
+                    }
+                }
             });
 
             ColorField inspectorColorField = inspectorSettingsFoldout.Q<ColorField>("InspectorColorField");
@@ -4628,6 +4758,20 @@ namespace TinyGiantStudio.BetterInspector
 
             Toggle parentChildTransformsToggle = inspectorSettingsFoldout.Q<Toggle>("ParentChildTransformsToggle");
             SetupParentChildTransformsToggle(parentChildTransformsToggle);
+
+            Toggle pingSelfButton = inspectorSettingsFoldout.Q<Toggle>("PingSelfButton");
+            pingSelfButton.SetValueWithoutNotify(editorSettings.pingSelfButton);
+            pingSelfButton.RegisterValueChangedCallback(e =>
+            {
+                editorSettings.pingSelfButton = e.newValue;
+
+                if (e.newValue)
+                    root.Q<Button>("PingSelfButton").style.display = DisplayStyle.Flex;
+                else
+                    root.Q<Button>("PingSelfButton").style.display = DisplayStyle.None;
+            });
+
+
 
             IntegerField maxChildInspector = inspectorSettingsFoldout.Q<IntegerField>("MaxChildInspector");
             SetupMaxChildInspector(maxChildInspector);
@@ -5778,7 +5922,21 @@ namespace TinyGiantStudio.BetterInspector
                 return;
 
             if (!editorSettings.ShowSizeGizmo)
+            {
+                if (editorSettings.ShowNotesOnGizmo && showThisNoteInSceneView)
+                {
+                    if (string.IsNullOrWhiteSpace(myNote) || myNote == noNoteString)
+                        return;
+
+                    if (handleLabelStyle == null)
+                        UpdateHandleLabelStyle();
+
+                    handleLabelStyle.normal.textColor = new Color(0, 0, 0, 0.75f);
+                    Handles.Label(transform.position + new Vector3(0, -0.5f, 0), myNote, handleLabelStyle);
+                }
+
                 return;
+            }
 
             if (handleLabelStyle == null)
                 UpdateHandleLabelStyle();
@@ -5804,7 +5962,7 @@ namespace TinyGiantStudio.BetterInspector
 
             DrawGizmoLabelAndHandle(gizmoBounds);
 
-            if (editorSettings.ShowNotesOnGizmo)
+            if (editorSettings.ShowNotesOnGizmo && showThisNoteInSceneView)
             {
                 if (string.IsNullOrWhiteSpace(myNote) || myNote == noNoteString)
                     return;
@@ -5812,16 +5970,17 @@ namespace TinyGiantStudio.BetterInspector
                 handleLabelStyle.normal.textColor = new Color(0, 0, 0, 0.75f);
                 Handles.Label(gizmoBounds.center + new Vector3(0, gizmoBounds.extents.y + 0.15f, 0), myNote, handleLabelStyle);
             }
+
         }
 
         private readonly float positionOffset = 0;
 
         private void DrawGizmoLabelAndHandle(Bounds gizmoBounds)
         {
-            float multiplier = ScalesFinder.MyScales().CurrentUnitValue();
+            float multiplier = ScalesManager.instance.CurrentUnitValue();
             //float multiplier = ScalesFinder.CurrentUnitValue(editorSettings.SelectedUnit);
-            int selectedUnit = ScalesFinder.MyScales().selectedUnit;
-            string[] availableUnits = ScalesFinder.MyScales().GetAvailableUnits();
+            int selectedUnit = ScalesManager.instance.selectedUnit;
+            string[] availableUnits = ScalesManager.instance.GetAvailableUnits();
             string unit;
             if (availableUnits.Length > selectedUnit)
                 unit = availableUnits[selectedUnit];

@@ -112,6 +112,10 @@ namespace TinyGiantStudio.BetterInspector
         public bool roundRotationField = false;
         public bool roundScaleField = false;
 
+        public bool animatedFoldout = true;
+
+        public bool pingSelfButton = false;
+
         //[SerializeField] private bool _lockScaleAspectRatio = false;
 
         //public bool LockScaleAspectRatio
@@ -376,7 +380,7 @@ namespace TinyGiantStudio.BetterInspector
             return string.Empty;
         }
 
-        public void SetNote(string id, string note, NoteType noteType, Color color)
+        public void SetNote(string id, string note, NoteType noteType, Color color, bool showThisNoteInSceneView)
         {
             for (int i = 0; i < notes.Count; i++)
             {
@@ -385,13 +389,14 @@ namespace TinyGiantStudio.BetterInspector
                     notes[i].note = note;
                     notes[i].noteType = noteType;
                     notes[i].color = color;
+                    notes[i].showInSceneView = showThisNoteInSceneView;
                     Save(true);
 
                     return;
                 }
             }
 
-            notes.Add(new Note(id, note, noteType, color));
+            notes.Add(new Note(id, note, noteType, color, showThisNoteInSceneView));
             Save(true);
         }
 

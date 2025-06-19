@@ -7,13 +7,15 @@
     <Style src="project://database/Assets/Plugins/Tiny%20Giant%20Studio/Better%20Inspector/Common%20Scripts/Editor/StyleSheets/Icons.uss?fileID=7433441132597879392&amp;guid=8485147538ab9684288c884484cd04b0&amp;type=3#Icons" />
     <Style src="project://database/Assets/Plugins/Tiny%20Giant%20Studio/Better%20Inspector/Common%20Scripts/Editor/StyleSheets/Labels.uss?fileID=7433441132597879392&amp;guid=8e783b06ea75cae42a70cbd434239c92&amp;type=3#Labels" />
     <Style src="project://database/Assets/Plugins/Tiny%20Giant%20Studio/Better%20Inspector/Better%20Transform/Scripts/Editor/StyleSheets/MainInformation.uss?fileID=7433441132597879392&amp;guid=48d496df230ab8c41a776949cc106f3e&amp;type=3#MainInformation" />
+    <Style src="project://database/Assets/Plugins/Tiny%20Giant%20Studio/Better%20Inspector/Better%20Transform/Scripts/Editor/StyleSheets/BetterTransformIcons.uss?fileID=7433441132597879392&amp;guid=ee1268c19bc1a45498a846da74d57ec9&amp;type=3#BetterTransformIcons" />
+    <Style src="project://database/Assets/Plugins/Tiny%20Giant%20Studio/Better%20Inspector/Common%20Scripts/Editor/StyleSheets/Footer.uss?fileID=7433441132597879392&amp;guid=3e3ef1c26165445469526cc86e434a31&amp;type=3#Footer" />
     <ui:GroupBox name="RootHolder" picking-mode="Ignore" style="margin-left: -15px; margin-right: -10px; margin-top: -28px; margin-bottom: 0; padding-left: 10px; padding-right: 10px; padding-top: 25px; padding-bottom: 0;">
         <ui:GroupBox name="NoteTopGroupBox" style="background-color: rgb(118, 111, 39); margin-left: -10px; margin-right: -10px; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; display: flex;">
             <ui:Button display-tooltip-when-elided="true" name="Button" class="iconButton" style="width: auto; height: auto; min-width: auto; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;">
                 <ui:Label text="Note Text" display-tooltip-when-elided="true" name="Note" class="textButton" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 2px; padding-right: 2px; padding-top: 2px; padding-bottom: 2px; -unity-text-align: upper-center; -unity-font-style: bold; flex-wrap: wrap; white-space: normal; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgba(255, 255, 255, 0.2); border-right-color: rgba(0, 0, 0, 0.2); border-top-color: rgba(255, 255, 255, 0.2); border-bottom-color: rgba(0, 0, 0, 0.2);" />
             </ui:Button>
         </ui:GroupBox>
-        <ui:GroupBox name="TopGroupBox" class="header" style="margin-left: -10px; margin-right: -10px; padding-right: 10px; margin-top: 0; background-color: rgba(255, 255, 255, 0.09); flex-direction: row; padding-top: 0; padding-bottom: 0; padding-left: 0; margin-bottom: 2px; border-bottom-width: 1px; border-bottom-color: rgba(0, 0, 0, 0.39); align-items: center; border-top-width: 1px; border-top-color: rgba(255, 255, 255, 0.2);">
+        <ui:GroupBox name="TopGroupBox" class="header" style="margin-left: -10px; margin-right: -10px; padding-right: 10px; margin-top: 0; background-color: rgba(255, 255, 255, 0.09); flex-direction: row; padding-top: 0; padding-bottom: 0; padding-left: 0; margin-bottom: 2px; border-bottom-width: 1px; border-bottom-color: rgba(0, 0, 0, 0.39); align-items: center; border-top-width: 0; border-top-color: rgba(255, 255, 255, 0.2);">
             <ui:Button display-tooltip-when-elided="true" name="WorldSpaceButton" tooltip="Values are in global orientation" class="toolbarComboButton" style="flex-grow: 1; display: none; align-items: center; padding-right: 5px; border-right-width: 0; border-left-color: rgba(0, 0, 0, 0.1); border-right-color: rgba(0, 0, 0, 0.1); border-top-color: rgba(0, 0, 0, 0.1); border-bottom-color: rgba(0, 0, 0, 0.1); flex-shrink: 0; justify-content: flex-start; border-left-width: 0; border-top-width: 0; border-bottom-width: 0; margin-left: 0; margin-right: 10px; margin-top: 0; margin-bottom: 0; padding-left: 10px; border-top-right-radius: 5px; border-bottom-right-radius: 5px;">
                 <ui:VisualElement name="Icon" style="background-image: url(&apos;project://database/Assets/Plugins/Tiny%20Giant%20Studio/Better%20Inspector/Better%20Transform/Artworks/TGS_d_ToolHandleGlobal@2x.png?fileID=2800000&amp;guid=cefea71d543290e4aa58bb2334c15ec2&amp;type=3#TGS_d_ToolHandleGlobal@2x&apos;);" />
                 <ui:Label text="World Space" display-tooltip-when-elided="true" name="WorldSpaceLabel" />
@@ -23,6 +25,7 @@
                 <ui:Label text="Local Space" display-tooltip-when-elided="true" name="LocalSpaceLabel" />
             </ui:Button>
             <ui:VisualElement style="flex-grow: 1;" />
+            <ui:Button text="Ping" parse-escape-sequences="true" display-tooltip-when-elided="true" name="PingSelfButton" class="text-button" />
             <ui:Label text="GUIDGUIDGUIDGUIDGUIDGUIDGUIDGUIDGUIDGUID" display-tooltip-when-elided="true" name="GUID" tooltip="Asset GUID" style="opacity: 0.25; -unity-font-style: italic; flex-shrink: 1; overflow: hidden; -unity-text-align: middle-right; font-size: 10px; height: 20px;" />
             <ui:GroupBox name="InlineSizeButtonsGroupBox" style="flex-direction: row-reverse; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />
             <ui:Label text="Sibling Index : 0" name="SiblingIndexLabel" class="unimportant-information-label" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
@@ -32,13 +35,11 @@
             <ui:Button display-tooltip-when-elided="true" name="AddButton" tooltip="Opens a context menu to add stuff." class="iconButton" style="margin-right: 0; flex-shrink: 0; flex-grow: 0; flex-direction: row;">
                 <ui:VisualElement class="menu-icon" style="height: 16px; width: 16px;" />
             </ui:Button>
-            <ui:Button display-tooltip-when-elided="true" name="OpenSettingsButton" tooltip="Open asset settings" class="iconButton" style="height: 20px; margin-right: 0; flex-shrink: 0; flex-grow: 0; align-items: center; justify-content: center; margin-left: 5px; display: none;">
-                <ui:VisualElement class="settings-icon" style="width: 13px; height: 13px; max-height: 13px; min-height: 13px;" />
-            </ui:Button>
         </ui:GroupBox>
         <ui:GroupBox name="NoteEditGroupBox" class="custom-foldout" style="display: flex;">
             <ui:GroupBox class="header" style="padding-right: 5px;">
                 <ui:Label text="Edit Note" class="foldout-toggle" style="flex-grow: 1; -unity-text-align: middle-left;" />
+                <ui:Toggle label="Show In Scene" tooltip="If turned on, shows the note in scene view gizmo. Doesn&apos;t work if this is completely turned off from settings." name="ShowThisNoteGizmoInSceneToggle" class="my-field" />
                 <ui:Label text="Placement Type" class="unimportant-information-label" style="margin-right: 0;" />
                 <uie:EnumField value="Center" name="NoteType" tooltip="NoteType" class="toolbar-popup-field" style="margin-left: 5px; margin-right: 0; margin-top: 0; margin-bottom: 0; height: 20px;" />
                 <uie:ColorField value="RGBA(0.000, 1.000, 1.000, 1.000)" name="NoteBGColor" style="max-width: 50px; display: flex; min-width: 50px;" />
@@ -80,11 +81,11 @@
                             <ui:VisualElement name="PrefabOverrideMark" class="prefabOverrideMark" />
                             <ui:GroupBox name="ScaleLabelGroupbox" class="field-label" style="flex-direction: row;">
                                 <ui:Label text="Scale" display-tooltip-when-elided="true" name="ScaleLabel" class="unity-vector3-field__label" style="flex-grow: 1;" />
-                                <ui:Button name="AspectRatioLocked" tooltip="Disable constrained proportions" class="iconButton" style="display: none;">
-                                    <ui:VisualElement style="background-image: url(&apos;project://database/Assets/Plugins/Tiny%20Giant%20Studio/Better%20Inspector/Better%20Transform/Artworks/TGS_d_Linked@2x.png?fileID=2800000&amp;guid=b3ba6b16e64ba2749ac0897da5849391&amp;type=3#TGS_d_Linked@2x&apos;); flex-grow: 1; flex-shrink: 0;" />
+                                <ui:Button name="AspectRatioLocked" tooltip="Disable constrained proportions" class="iconButton" style="display: flex;">
+                                    <ui:VisualElement class="link-icon" style="flex-grow: 1; flex-shrink: 0;" />
                                 </ui:Button>
-                                <ui:Button name="AspectRatioUnlocked" tooltip="Enable constrained proportions" class="iconButton" style="display: flex;">
-                                    <ui:VisualElement style="background-image: url(&apos;project://database/Assets/Plugins/Tiny%20Giant%20Studio/Better%20Inspector/Better%20Transform/Artworks/TGS_d_Unlinked@2x.png?fileID=2800000&amp;guid=49ded999698ee6f4fa78f2b2c45e4661&amp;type=3#TGS_d_Unlinked@2x&apos;); flex-grow: 1; flex-shrink: 0;" />
+                                <ui:Button name="AspectRatioUnlocked" tooltip="Enable constrained proportions" class="iconButton" style="display: none;">
+                                    <ui:VisualElement class="unlink-icon" style="flex-grow: 1; flex-shrink: 0;" />
                                 </ui:Button>
                             </ui:GroupBox>
                             <uie:Vector3Field name="LocalScale" style="flex-grow: 1; margin-right: 0; display: flex;" />
@@ -179,10 +180,10 @@
                         <ui:GroupBox name="SizeLabelGroupBox" class="field-label">
                             <ui:Label text="Size" display-tooltip-when-elided="true" tooltip="There is a few miliseconds delay in setting the size and it can&apos;t set size below a certain amount." class="unity-vector3-field__label" style="flex-grow: 1;" />
                             <ui:Button name="AspectRatioLocked" tooltip="Disable constrained proportions" class="iconButton" style="display: none;">
-                                <ui:VisualElement style="background-image: url(&apos;project://database/Assets/Plugins/Tiny%20Giant%20Studio/Better%20Inspector/Better%20Transform/Artworks/TGS_d_Linked@2x.png?fileID=2800000&amp;guid=b3ba6b16e64ba2749ac0897da5849391&amp;type=3#TGS_d_Linked@2x&apos;); flex-grow: 1; flex-shrink: 0;" />
+                                <ui:VisualElement class="link-icon" style="flex-grow: 1; flex-shrink: 0;" />
                             </ui:Button>
                             <ui:Button name="AspectRatioUnlocked" tooltip="Enable constrained proportions" multiline="true" class="iconButton" style="display: flex;">
-                                <ui:VisualElement style="background-image: url(&apos;project://database/Assets/Plugins/Tiny%20Giant%20Studio/Better%20Inspector/Better%20Transform/Artworks/TGS_d_Unlinked@2x.png?fileID=2800000&amp;guid=49ded999698ee6f4fa78f2b2c45e4661&amp;type=3#TGS_d_Unlinked@2x&apos;); flex-grow: 1; flex-shrink: 0;" />
+                                <ui:VisualElement class="unlink-icon" style="flex-grow: 1; flex-shrink: 0;" />
                             </ui:Button>
                         </ui:GroupBox>
                         <uie:Vector3Field name="SizeFoldoutField" style="flex-shrink: 1; flex-grow: 1; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 3px;" />
@@ -200,7 +201,7 @@
             </ui:GroupBox>
         </ui:GroupBox>
         <ui:GroupBox name="ChildGroupBox" view-data-key="ChildGroupBoxDataKey" class="custom-foldout" style="display: flex; margin-top: 5px;">
-            <ui:GroupBox name="Header" class="header">
+            <ui:GroupBox name="Header" class="header" style="align-items: stretch;">
                 <ui:Toggle name="FoldoutToggle" text="Child Objects" value="false" view-data-key="childsFoldoutDataKey" class="unity-foldout__toggle foldout-toggle" />
                 <ui:Label text="Label" display-tooltip-when-elided="true" name="Label1" class="unimportant-information-label" />
                 <ui:Label text="Label" display-tooltip-when-elided="true" name="Label2" tooltip="Total number of objects under this one." class="unimportant-information-label" />
@@ -214,6 +215,11 @@
                 </ui:GroupBox>
             </ui:GroupBox>
         </ui:GroupBox>
+        <ui:GroupBox name="NoteBottomGroupBox" style="background-color: rgb(118, 111, 39); margin-left: -10px; margin-right: -10px; margin-top: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; display: none;">
+            <ui:Button display-tooltip-when-elided="true" name="Button" class="iconButton" style="width: auto; height: auto; min-width: auto; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;">
+                <ui:Label text="Note Text" display-tooltip-when-elided="true" name="Note" class="textButton" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 2px; padding-right: 2px; padding-top: 2px; padding-bottom: 2px; -unity-text-align: upper-center; -unity-font-style: bold; flex-wrap: wrap; white-space: normal;" />
+            </ui:Button>
+        </ui:GroupBox>
         <ui:GroupBox name="Settings" class="custom-foldout" style="overflow: hidden; display: none; margin-top: 10px;">
             <ui:GroupBox name="Header" class="header" style="overflow: hidden; align-items: stretch;">
                 <ui:Toggle name="FoldoutToggle" text="Settings" value="false" tooltip="The foldout will disappear if closed and can be reopened by the settings icon." class="unity-foldout__toggle foldout-toggle" />
@@ -221,27 +227,27 @@
                 <ui:GroupBox style="flex-direction: row; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; flex-shrink: 1;">
                     <ui:Label text="Reset to" display-tooltip-when-elided="true" class="unimportant-information-label" style="flex-shrink: 1;" />
                     <ui:Button text="Default" display-tooltip-when-elided="true" name="ResetButton" class="myButton" style="border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0; border-top-width: 0; border-bottom-width: 0;" />
-                    <ui:Button text="Minimal" display-tooltip-when-elided="true" name="ResetInspectorSettingsToMinimal" class="myButton" style="border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0; border-top-width: 0; border-bottom-width: 0;" />
+                    <ui:Button text="Minimal" display-tooltip-when-elided="true" name="ResetInspectorSettingsToMinimal" class="myButton" style="border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0; border-top-width: 0; border-bottom-width: 0; border-right-width: 0;" />
                     <ui:Button text="Empty" display-tooltip-when-elided="true" name="ResetInspectorSettingsToNothing" class="myButton" style="border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0; border-top-width: 0; border-bottom-width: 0; border-right-width: 0; display: none;" />
                 </ui:GroupBox>
             </ui:GroupBox>
             <ui:GroupBox name="Content" class="container content" style="padding-top: 0; display: flex;">
-                <ui:GroupBox name="Footer" class="customToolbar" style="margin-left: -7px; margin-right: -7px; margin-top: 0; margin-bottom: 10px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; border-bottom-width: 1px; border-left-color: rgba(0, 0, 0, 0.2); border-right-color: rgba(0, 0, 0, 0.2); border-top-color: rgba(0, 0, 0, 0.2); border-bottom-color: rgba(0, 0, 0, 0.2); background-color: rgba(0, 0, 0, 0.1); flex-direction: row;">
-                    <ui:Label text="v2.9.0" display-tooltip-when-elided="true" tooltip="Current Version of Better Transform" name="Version" style="margin-right: 10px; -unity-font-style: bold-and-italic; -unity-text-align: middle-right; margin-left: 10px; flex-grow: 1; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px;" />
-                    <uie:ToolbarButton text="Check for Updates" display-tooltip-when-elided="true" name="AssetLink" tooltip="Check if there are updates available." style="-unity-font-style: italic; -unity-text-align: middle-left; justify-content: center; overflow: hidden; flex-shrink: 0; border-left-color: rgba(255, 255, 255, 0.08); border-right-color: rgba(0, 0, 0, 0.2);" />
-                    <uie:ToolbarButton text="Documentation" display-tooltip-when-elided="true" name="Documentation" tooltip="Better Transform Documentation." style="-unity-font-style: italic; -unity-text-align: middle-left; justify-content: center; overflow: hidden; flex-shrink: 0; border-left-color: rgba(255, 255, 255, 0.08); border-right-color: rgba(0, 0, 0, 0.2);" />
-                    <uie:ToolbarButton text="Other Assets" display-tooltip-when-elided="true" name="OtherAssetsLink" tooltip="Checkout other awesome assets." style="-unity-font-style: italic; -unity-text-align: middle-left; overflow: hidden; flex-shrink: 0; border-left-color: rgba(255, 255, 255, 0.1);" />
+                <ui:GroupBox name="Footer" class="customToolbar footer">
+                    <uie:ToolbarButton text="v2.11.0" display-tooltip-when-elided="true" name="AssetLink" tooltip="Click to check if there are updates available." class="version" />
+                    <uie:ToolbarButton text="Documentation" display-tooltip-when-elided="true" name="Documentation" tooltip="Better Transform Documentation." />
+                    <uie:ToolbarButton text="Other Assets" display-tooltip-when-elided="true" name="OtherAssetsLink" tooltip="Checkout other awesome assets." />
                 </ui:GroupBox>
                 <ui:GroupBox name="InspectorCustomizationSettings" class="custom-foldout">
                     <ui:GroupBox name="Header" class="header">
-                        <ui:Toggle name="FoldoutToggle" text="Inspector Colors" value="false" view-data-key="inspectorsViewDataKey" class="unity-foldout__toggle foldout-toggle" />
+                        <ui:Toggle name="FoldoutToggle" text="Visual" value="false" view-data-key="inspectorsViewDataKey" class="unity-foldout__toggle foldout-toggle" />
                     </ui:GroupBox>
                     <ui:GroupBox name="Content" class="container content" style="display: flex;">
-                        <ui:GroupBox style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-direction: row; align-items: center;">
+                        <ui:Toggle label="Foldout Animations" name="FoldoutAnimationsToggle" />
+                        <ui:GroupBox style="margin-left: 5px; margin-right: 0; margin-top: 5px; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-direction: row; align-items: center;">
                             <ui:Toggle name="OverrideInspectorColorToggle" style="margin-right: 5px; margin-left: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-top: 0; margin-bottom: 0;" />
                             <uie:ColorField label="Inspector Color" value="#0000FF05" name="InspectorColorField" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-grow: 1;" />
                         </ui:GroupBox>
-                        <ui:GroupBox style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-direction: row; align-items: center;">
+                        <ui:GroupBox style="margin-left: 5px; margin-right: 0; margin-top: 2px; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-direction: row; align-items: center;">
                             <ui:Toggle name="OverrideFoldoutColorToggle" style="margin-right: 5px; margin-left: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-top: 0; margin-bottom: 0;" />
                             <uie:ColorField label="Foldout Color" value="#0000FF05" name="FoldoutColorField" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-grow: 1;" />
                         </ui:GroupBox>
@@ -255,7 +261,7 @@
                         <ui:Toggle label="Copy, Paste &amp; Reset Buttons" name="CopyPasteButtonsToggle" tooltip="If enabled, it will show three buttons besides the vector3 fields" />
                         <ui:Toggle label="Show Sibling Index" name="ShowSiblingIndexToggle" tooltip=" If a GameObject shares a parent with other GameObjects and are on the same level (i.e. they share the same direct parent), these GameObjects are known as siblings. The sibling index shows where each GameObject sits in this sibling hierarchy. If an object has no parent, meaning its a root object, it has no sibling index." />
                         <ui:Toggle label="Show Asset GUID" name="ShowAssetGUID" tooltip="GUID is a Globally Unique Identifier for the asset. So, it&apos;s only available for prefabs in this context." />
-                        <ui:Toggle label="Use Unity&apos;s Transform Inspector forLlocal Fields " name="DefaultUnityInspectorToggle" tooltip="If turned off, instead of using Unity&apos;s default transform inspector, the asset will use custom fields made in UI Toolkit. Minor behavior change might be seen in edge cases. It is adviced to keep this turned on. This setting is ignored when both workspace is enabled." />
+                        <ui:Toggle label="Use Unity&apos;s Transform Inspector for Local Fields " name="DefaultUnityInspectorToggle" tooltip="If turned off, instead of using Unity&apos;s default transform inspector, the asset will use custom fields made in UI Toolkit. Minor behavior change might be seen in edge cases. It is adviced to keep this turned on. This setting is ignored when both workspace is enabled." />
                     </ui:GroupBox>
                 </ui:GroupBox>
                 <ui:GroupBox name="SizeGroupBox" class="custom-foldout">
@@ -299,7 +305,7 @@
                         <ui:GroupBox name="RightSide" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-shrink: 1; justify-content: flex-end; flex-direction: row; overflow: hidden;" />
                     </ui:GroupBox>
                     <ui:GroupBox name="Content" class="container content" style="display: flex;">
-                        <ui:Toggle label="Show notes in Scene View Gizmo" tooltip="Make sure there is a note and the scene&apos;s gizmo is turned on for this to work." name="ShowNotesInSceneGizmoToggle" />
+                        <ui:Toggle label="Show Notes in Scene View" name="ShowNotesInSceneGizmoToggle" />
                         <ui:GroupBox style="flex-direction: row; margin-left: 3px; margin-right: 3px; margin-top: 3px; margin-bottom: 3px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;">
                             <ui:Label text="17" display-tooltip-when-elided="true" name="NotesCount" style="margin-right: 5px;" />
                             <ui:Label text="Prefab Notes saved" display-tooltip-when-elided="true" tooltip="These are notes for assets in your project folder." style="flex-grow: 1; opacity: 0.7;" />
@@ -323,7 +329,9 @@
                     <ui:GroupBox name="Content" class="container content">
                         <ui:Toggle label="Parent/Child Information" name="ParentChildTransformsToggle" />
                         <uie:IntegerField label="Max Child Inspector" value="42" name="MaxChildInspector" />
-                        <ui:GroupBox style="margin-top: 10px; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; flex-direction: row; justify-content: space-between;">
+                        <ui:Toggle label="Ping Self Button" tooltip="Button to Ping this object in the in the hierarchy. Please note that this was added because of a user request." name="PingSelfButton" />
+                        <ui:Label tabindex="-1" text="The settings below are ignored when using Unity&apos;s default inspector for local transform" parse-escape-sequences="true" display-tooltip-when-elided="true" class="unimportant-information-label" style="margin-top: 10px; margin-left: 0;" />
+                        <ui:GroupBox style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; flex-direction: row; justify-content: space-between;">
                             <uie:IntegerField label="Field Rounding Amount" value="42" name="FieldRounding" tooltip="Numbers in the fileds are rounded to a specific number of digits after the decimal point for cleanliness." style="flex-grow: 1;" />
                             <ui:Label text="(Rounding just changes the value in the inspector. Doesn&apos;t impact the real value)" style="-unity-font-style: italic; -unity-text-align: middle-left; opacity: 0.74; display: none;" />
                         </ui:GroupBox>
@@ -339,11 +347,6 @@
                     <ui:Toggle label="Performance Logging" name="PerformanceLoggingToggle" style="margin-left: 0; margin-right: 20px; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />
                 </ui:GroupBox>
             </ui:GroupBox>
-        </ui:GroupBox>
-        <ui:GroupBox name="NoteBottomGroupBox" style="background-color: rgb(118, 111, 39); margin-left: -10px; margin-right: -10px; margin-top: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; display: none; border-top-width: 1px; border-top-color: rgba(255, 255, 255, 0.1);">
-            <ui:Button display-tooltip-when-elided="true" name="Button" class="iconButton" style="width: auto; height: auto; min-width: auto; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;">
-                <ui:Label text="Note Text" display-tooltip-when-elided="true" name="Note" class="textButton" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 2px; padding-right: 2px; padding-top: 2px; padding-bottom: 2px; -unity-text-align: upper-center; -unity-font-style: bold; flex-wrap: wrap; white-space: normal;" />
-            </ui:Button>
         </ui:GroupBox>
     </ui:GroupBox>
 </ui:UXML>

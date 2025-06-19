@@ -56,7 +56,11 @@ namespace TinyGiantStudio.BetterInspector
         }
 
 
-
+        public Note MyNote(Transform target)
+        {
+            notes.TryGetValue(target, out var note);
+            return note;
+        }
 
         public string GetNote(Transform target)
         {
@@ -83,7 +87,7 @@ namespace TinyGiantStudio.BetterInspector
             return note.color;
         }
 
-        public void SetNote(Transform target, string note, NoteType noteType, Color noteColor)
+        public void SetNote(Transform target, string note, NoteType noteType, Color noteColor, bool showThisNoteInSceneView)
         {
             if (notes.ContainsKey(target))
             {
@@ -96,10 +100,11 @@ namespace TinyGiantStudio.BetterInspector
                     notes[target].note = note;
                     notes[target].noteType = noteType;
                     notes[target].color = noteColor;
+                    notes[target].showInSceneView = showThisNoteInSceneView;
                 }
             }
             else
-                notes.Add(target, new Note(note, noteType, noteColor));
+                notes.Add(target, new Note(note, noteType, noteColor, showThisNoteInSceneView));
 
             UpdatePresistentValues();
             EditorUtility.SetDirty(this);
@@ -145,24 +150,29 @@ namespace TinyGiantStudio.BetterInspector
     [System.Serializable]
     public class Note
     {
+        //Serializefield should be unnecessary here but weirdly doesn't work in some cases. Need to recheck later
         [SerializeField] public string id; //used by prefabs to identify who this belongs to
         [SerializeField] public string note;
         [SerializeField] public NoteType noteType;
         [SerializeField] public Color color = new Color(0.4f, 0.4f, 0.5f);
+        [SerializeField] public bool showInSceneView = true;
 
-        public Note(string newNote, NoteType newNoteType, Color noteColor)
+
+        public Note(string newNote, NoteType newNoteType, Color noteColor, bool showInSceneView)
         {
             this.note = newNote;
             this.noteType = newNoteType;
             this.color = noteColor;
+            this.showInSceneView = showInSceneView;
         }
 
-        public Note(string id, string newNote, NoteType newNoteType, Color noteColor)
+        public Note(string id, string newNote, NoteType newNoteType, Color noteColor, bool showInSceneView)
         {
             this.id = id;
             this.note = newNote;
             this.noteType = newNoteType;
             this.color = noteColor;
+            this.showInSceneView = showInSceneView;
         }
     }
 
